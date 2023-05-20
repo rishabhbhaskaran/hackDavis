@@ -2,13 +2,13 @@ from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/getAgreggateMap')
+@app.route('/getAggregateMap')
 def aggreagateMap():
     dict={}
     pins=list()
     pin={}
-    pin["lat"]=1234
-    pin["long"]=5678
+    pin["lat"]=38.537820
+    pin["long"]=-121.751360
     data={}
     data["desc"]="Testing"
     pin["data"]=data
