@@ -1,12 +1,20 @@
 from flask import Flask
 
-api = Flask(__name__)
+app = Flask(__name__)
 
-@api.route('/profile')
-def my_profile():
-    response_body = {
-        "name": "Lily",
-        "about" :"Hello! I'm a full stack developer that loves python and javascript"
-    }
+@app.route('/getAgreggateMap')
+def aggreagateMap():
+    dict={}
+    pins=list()
+    pin={}
+    pin["lat"]=1234
+    pin["long"]=5678
+    data={}
+    data["desc"]="Testing"
+    pin["data"]=data
+    pins.append(pin)
+    dict["pins"]=pins
+    return dict
 
-    return response_body
+if __name__ == '__main__':
+    app.run(debug=True, port=8000)
