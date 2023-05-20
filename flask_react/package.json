@@ -2,12 +2,19 @@
   "name": "flask_react",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
   "dependencies": {
     "axios": "^1.4.0",
+    "http-proxy-middleware": "^2.0.6",
+    "local-reverse-geocoder": "^0.16.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-geocode": "^0.2.3",
+    "react-google-map": "^3.1.1",
+    "react-google-maps-loader": "^4.3.1",
     "react-scripts": "^5.0.1"
+  },
+  "browser": {
+    "fs": false
   },
   "scripts": {
     "start": "./node_modules/react-scripts/bin/react-scripts.js start",

@@ -1,14 +1,27 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
-import { ReactDOM } from 'react-dom';
+import './yeti.min.css';
 import { createRoot } from 'react-dom/client';
-// import logo from './logo.svg';
-// import './App.css';
-function App() {
+import Map from './map.js';
 
+function App() {
     // new line start
-    const [profileData, setProfileData] = useState(null)
+    const [mapData, setMapData] = useState(null);
+    const [locationData, setLocationData] = useState(null);
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            // x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        setLocationData({ 'lat': position.coords.latitude, 'long': position.coords.longitude });
+        // getCity(position.coords.latitude, position.coords.longitude);
+    }
 
     function getData() {
         axios({
@@ -17,12 +30,14 @@ function App() {
         })
             .then((response) => {
                 const res = response.data['pins'];
-                console.log(res);
-                setProfileData(({
-                    lat: res[0].lat,
-                    long: res[0].long
-                }))
-                console.log(res);
+                var mapArray = [['Lat', 'Long', 'Name']];
+                for (let i = 0; i < res.length; i++) {
+                    const currLat = res[i]['lat'];
+                    const currLong = res[i]['long'];
+                    const currName = res[i]['data']['name'] ? res[i]['data']['name'] : "";
+                    mapArray.push([currLat, currLong, currName]);
+                }
+                setMapData([...mapArray])
             }).catch((error) => {
                 if (error.response) {
                     console.log(error.response)
@@ -31,33 +46,23 @@ function App() {
                 }
             })
     }
-    //end of new line 
+
+    useEffect(() => {
+        getData()
+        getLocation();
+    }, []);
 
     return (
         <div className="App">
-            <header className="App-header">
-                {/* <img src={logo} className="App-logo" alt="logo" /> */}
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-
-                {/* new line start*/}
-                <p>To get your profile details: </p><button onClick={getData}>Click me</button>
-                {profileData && <div>
-                    <p>Latitude: {profileData.lat}</p>
-                    <p>Longitude: {profileData.long}</p>
-                </div>
-                }
-                {/* end of new line */}
-            </header>
+            {/* <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary"></div> */}
+            <div className="container">
+                <header className="App-header">
+                    <h1>Discover Davis</h1>
+                    {<div id='map'></div>}
+                    {/* {locationData && <div>Lat {locationData.lat} Long {locationData.long}</div>} */}
+                </header>
+            </div>
+            {mapData && locationData && <Map lat={locationData.lat} long={locationData.long} data={mapData} />}
         </div>
     );
 }
@@ -65,5 +70,3 @@ function App() {
 const domNode = document.getElementById('root');
 const root = createRoot(domNode);
 root.render(<App />);
-
-export default App;
