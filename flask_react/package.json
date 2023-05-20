@@ -2,7 +2,9 @@
   "name": "flask_react",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
+    "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
@@ -14,6 +16,18 @@
     "test": "./node_modules/react-scripts/bin/react-scripts.js test --env=jsdom",
     "eject": "./node_modules/react-scripts/bin/react-scripts.js eject",
     "server": "cd client/api && pm2 start server.js --watch",
-    "proxy": "http://128.199.139.144:3000"
+    "proxy": "http://localhost:3000"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
