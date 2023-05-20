@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from "axios";
+import { ReactDOM } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 // import logo from './logo.svg';
 // import './App.css';
 function App() {
@@ -11,14 +13,16 @@ function App() {
     function getData() {
         axios({
             method: "GET",
-            url: "/profile",
+            url: "/getAgreggateMap",
         })
             .then((response) => {
-                const res = response.data
+                const res = response.data['pins'];
+                console.log(res);
                 setProfileData(({
-                    profile_name: res.name,
-                    about_me: res.about
+                    lat: res[0].lat,
+                    long: res[0].long
                 }))
+                console.log(res);
             }).catch((error) => {
                 if (error.response) {
                     console.log(error.response)
@@ -32,7 +36,7 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
+                {/* <img src={logo} className="App-logo" alt="logo" /> */}
                 <p>
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
@@ -48,8 +52,8 @@ function App() {
                 {/* new line start*/}
                 <p>To get your profile details: </p><button onClick={getData}>Click me</button>
                 {profileData && <div>
-                    <p>Profile name: {profileData.profile_name}</p>
-                    <p>About me: {profileData.about_me}</p>
+                    <p>Latitude: {profileData.lat}</p>
+                    <p>Longitude: {profileData.long}</p>
                 </div>
                 }
                 {/* end of new line */}
@@ -57,5 +61,9 @@ function App() {
         </div>
     );
 }
+
+const domNode = document.getElementById('root');
+const root = createRoot(domNode);
+root.render(<App />);
 
 export default App;
