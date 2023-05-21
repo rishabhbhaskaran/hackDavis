@@ -21,9 +21,9 @@ function Visualize(props) {
                 <div onClick={() => {
                     changeLayerInfo(props.id, !props.clicked)
                 }}>
-                    {props.name}
+                    <b>{props.name}</b>
                     <br />
-                    City of Davis
+                    {props.userId}
                 </div>
             </div>
         )
@@ -32,7 +32,7 @@ function Visualize(props) {
     function SavedLayers() {
         return (<div id="saved_layers">
             <h2>Saved Layers</h2>
-            {savedLayerData && savedLayerData.length > 0 && savedLayerData.map(item => <LayerItem key={item.name} name={item.name} id={item.id} clicked={item.clicked} />)}
+            {savedLayerData && savedLayerData.length > 0 && savedLayerData.map(item => <LayerItem key={item.name} name={item.name} userId={item.userId} id={item.id} clicked={item.clicked} />)}
         </div>);
     }
 
@@ -46,9 +46,10 @@ function Visualize(props) {
             const res = response.data;
             for (let i = 0; i < res.length; i++) {
                 const currLayerId = res[i].layerId;
+                const currUserId = res[i].userId;
                 const currName = res[i].layerName ? res[i].layerName : '';
                 savedLayers.push(currLayerId);
-                savedLayerData.push({ 'name': currName, 'id': currLayerId, 'clicked': false });
+                savedLayerData.push({ 'name': currName, 'id': currLayerId, 'userId': currUserId, 'clicked': false });
             }
             setSavedLayerData([...savedLayerData]);
             setSavedLayers([...savedLayers]);

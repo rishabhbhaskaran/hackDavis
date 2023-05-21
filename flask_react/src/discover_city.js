@@ -49,7 +49,8 @@ function DiscoverCity() {
                     const currName = res[i]['data']['name'] ? res[i]['data']['name'] : "";
                     mapArray.push([currLat, currLong, currName]);
                 }
-                setMapData([...mapArray])
+                setMapData([...mapArray]);
+                getTagLine();
             }).catch((error) => {
                 if (error.response) {
                     console.log(error.response)
@@ -61,7 +62,6 @@ function DiscoverCity() {
 
     useEffect(() => {
         getLocation();
-        getTagLine();
     }, []);
 
     return (
@@ -70,6 +70,7 @@ function DiscoverCity() {
             <div className="container">
                 <h1>Discover Davis</h1>
                 <div id="tagline">{tagline}</div>
+                <br />
                 <div id='map'></div>
                 {/* {locationData && <div>Lat {locationData.lat} Long {locationData.long}</div>} */}
             </div>
