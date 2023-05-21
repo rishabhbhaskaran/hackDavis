@@ -1,20 +1,85 @@
-from flask import Flask
+from flask import Flask, request, jsonify, make_response
+from pymongo import MongoClient
+from pymongo import GEOSPHERE
+import requests
+import urllib.parse
+import uuid
 
 app = Flask(__name__)
+conn="mongodb://localhost:27017"
+col=object()
+client=object()
+
+
+def getCoor(lat,long):
+    locData=dict()
+    locData['type']='Point'
+    locData['coordinates'] = [float(long),float(lat)]
+    return locData
+
+
+@app.route('/createProject', methods=['POST'])
+def createProject():
+    req=request.json
+
+    #get lat,long from address
+
+    add=req['address']
+    url='https://nominatim.openstreetmap.org/search/{addr}?format=json'
+    url=url.replace('{addr}',add)
+    servResp=requests.get(url).json()
+
+
+    coor=getCoor(servResp[0]['lat'],servResp[0]['lon'])
+    req['location']=coor
+    if 'layerId' not in req:
+        req['layerId'] = str(uuid.uuid4())
+
+    if col.insert_one(req):
+        return jsonify({'lat':servResp[0]['lat'],'long':servResp[0]['lon'],'layerId':req['layerId']})
+
+def transform(results):
+    pins=[]
+    for result in results:
+        pin={'lat':result['location']['coordinates'][1],
+             'long': result['location']['coordinates'][0]}
+        if 'data' in result:
+            pin['data'] = result['data']
+        pins.append(pin)
+
+    return pins
+
 
 @app.route('/getAggregateMap')
 def aggreagateMap():
-    dict={}
-    pins=list()
-    pin={}
-    pin["lat"]=38.537820
-    pin["long"]=-121.751360
-    data={}
-    data["desc"]="Testing"
-    pin["data"]=data
-    pins.append(pin)
-    dict["pins"]=pins
-    return dict
+    print(client)
+    db=client['hackDavis']
+    collection = db['Projects']
+    collection.create_index([("location", GEOSPHERE)])
+
+    # Define the target geospatial point
+    target_point = {
+        "type": "Point",
+        "coordinates": [-121.75136,38.53782]
+    }
+
+    # Perform the query to find points close to the target point
+    query = {
+        "location": {
+            "$near": {
+                "$geometry": target_point,
+                "$maxDistance": 10
+            }
+        }
+    }
+
+    result=collection.find(query)
+    #transform
+    results=transform(result)
+    return results
 
 if __name__ == '__main__':
+    client=MongoClient(conn)
+    db = client['hackDavis']
+    col = db['Projects']
     app.run(debug=True, port=8000)
