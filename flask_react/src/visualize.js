@@ -6,11 +6,14 @@ import './visualize.css';
 import { createRoot } from 'react-dom/client';
 import Map from './map.js';
 
+var colors = ['blue', 'green', 'red'];
+
 function Visualize(props) {
     const [mapData, setMapData] = useState(null);
     const [locationData, setLocationData] = useState(null);
     const [savedLayers, setSavedLayers] = useState(null);
     const [savedLayerData, setSavedLayerData] = useState(null);
+    const [lastIdx, setLastIdx] = useState(0);
 
     function LayerItem(props) {
         return (
@@ -63,11 +66,14 @@ function Visualize(props) {
             method: 'GET',
             url: '/getLayer?layerId=' + layerId
         }).then((response) => {
+            const color = colors[lastIdx]; // pick a color
+            setLastIdx((lastIdx + 1) % 3);
+            console.log(color);
             const res = response.data['pins'];
             const currPins = [];
             for (let i = 0; i < res.length; i++) {
                 let currPin = res[i];
-                currPins.push([currPin.lat, currPin.long, currPin.name]);
+                currPins.push([parseFloat(currPin.lat), parseFloat(currPin.long), currPin.name, color]);
             }
 
             let newSavedLayerData = [];
@@ -129,7 +135,7 @@ function Visualize(props) {
         var lat = position.coords.latitude;
         var long = position.coords.longitude;
         setLocationData({ 'lat': lat, 'long': long });
-        setMapData([['Lat', 'Long', 'Name'], [lat, long, 'Current Location']]);
+        setMapData([[lat, long, 'Current Location', 'red']]);
     }
 
     useEffect(() => {

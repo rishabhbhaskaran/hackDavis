@@ -3,10 +3,31 @@
   transition: transform 300ms ease 100ms;
   margin: 0 2px;
   position: relative;
+  text-align: center;
 
   img {
     height: 100%;
     width: 100%;
     vertical-align: top;
+  }
+
+  .icon:hover {
+    // webkit-filter: blur(1px);
+    /* Chrome, Safari, Opera */
+    filter: blur(1px);
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .bottomCentered {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }

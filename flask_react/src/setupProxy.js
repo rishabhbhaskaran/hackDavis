@@ -29,4 +29,25 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.get(
+    '/getFeatured',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
+  app.get(
+    '/getVerified',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
+  app.patch(
+    '/save',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
 };
