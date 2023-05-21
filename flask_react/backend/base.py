@@ -9,6 +9,8 @@ app = Flask(__name__)
 conn="mongodb://localhost:27017"
 col=object()
 client=object()
+db=object()
+topPicks=[]
 
 
 def getCoor(lat,long):
@@ -34,6 +36,10 @@ def createProject():
     req['location']=coor
     if req['layerId'] is None:
         req['layerId'] = str(uuid.uuid4())
+        layer=db['layerMeta']
+        layer.insert_one({'_id':req['layerId'],'userId':req['userId'],'supports':0,
+                          'savedBy':[req['userId']],'saves':0, 'layerName':req['layerName']})
+
 
     if col.insert_one(req):
         return jsonify({'lat':servResp[0]['lat'],'long':servResp[0]['lon'],'layerId':req['layerId']})
@@ -91,15 +97,56 @@ def getLayer():
 
 @app.route('/getLayers')
 def getLayers():
+    layer=db['layerMeta']
     if request.args.get('userId'):
         projection = {
             'layerName': 1,
-            'layerId': 1,
-            '_id': 0
+            'layerId': '$_id',
+            '_id': 0,
+            'userId':1
         }
 
-        results=[ele for ele in col.find({'userId':request.args.get('userId')},projection)]
+        query = {'savedBy':{'$in':[request.args.get('userId')]}}
+
+      
+        # Perform the aggregation pipeline with the query and projection
+        result = layer.aggregate([
+            {'$match': query},
+            {'$project': projection}
+        ])
+
+        results=[ele for ele in result]
         return jsonify(results)
+
+@app.route('/support',methods=['PATCH'])
+def likeLayer():
+    layer=db['layerMeta']
+    req=request.json
+    if req['layerId']:
+        query={'_id':req['layerId']}
+        update={'$inc':{'supports':1}}
+        layer.update_one(query,update)
+
+    return make_response()
+
+@app.route('/save',methods=['PATCH'])
+def saveLayer():
+    req=request.json
+    if req['layerId'] and req['userId']:
+        layer=db['layerMeta']
+        query={
+            '_id':req['layerId']
+        }
+        update={'$push':{'savedBy':req['userId']},'$inc':{'saves':1}}
+        layer.update_one(query,update)
+    return make_response()
+
+
+
+def getTopPicks():
+    config=db['config']
+    cur=config.find({"key":"officialUsers"})
+
 
 if __name__ == '__main__':
     client=MongoClient(conn)
