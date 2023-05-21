@@ -7,6 +7,7 @@ import urllib.parse
 import uuid
 import openai
 import oneai
+from geopy.distance import geodesic
 
 #from typing_extensions import dataclass_transform
 oneai.api_key = "8c26ffde-bffa-44a7-bb1a-551640540ba3"
@@ -236,10 +237,9 @@ def getTag():
             prompt+=str(num)+". "+project['description']+' '
 
     prompt='summarize all this: '+prompt+' in 20 words'
-    response=chat_with_gpt(prompt)
+    response=chatOneAI(prompt)
     print(response)
     return jsonify(response)
-
 
 
 
