@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from pymongo import MongoClient
 from pymongo import GEOSPHERE
+import logging
 import requests
 import urllib.parse
 import uuid
@@ -9,7 +10,7 @@ import oneai
 
 #from typing_extensions import dataclass_transform
 oneai.api_key = "8c26ffde-bffa-44a7-bb1a-551640540ba3"
-
+logging.getLogger("pymongo").setLevel(logging.DEBUG)
 
 
 app = Flask(__name__)
@@ -168,11 +169,27 @@ def getTopPicks():
     #get top
     layer=db['layerMeta']
     cur=layer.find()
-    results=[ele for ele in cur]
+    results=[]
+    for ele in cur:
+        ele['layerId']=ele['_id']
+        ele.pop('_id')
+        results.append(ele)
+
     results=[ele for ele in results if 'score' in ele]
     topPicks = sorted(results, key=lambda x: x['score'])[:10]
     return jsonify(topPicks)
 
+@app.route('/getVerified', methods=['GET'])
+def getVerified():
+    layer=db['layerMeta']
+    cur=layer.find({'userId':{'$in':officials}})
+    results=[]
+    for ele in cur:
+        ele['layerId']=ele['_id']
+        ele.pop('_id')
+        results.append(ele)
+
+    return jsonify(results)
 
 ###########chat with gpt################
 
