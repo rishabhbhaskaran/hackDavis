@@ -22,3 +22,9 @@
 .item:hover {
     transform: scale(1.5) !important;
 }
+
+.sliderItem {
+    webkit-filter: blur(4px);
+    /* Chrome, Safari, Opera */
+    filter: blur(4px);
+}

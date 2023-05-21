@@ -5,6 +5,7 @@ import './yeti.min.css';
 import './browse.css';
 import Map from './map.js';
 import Slider from './carousel/NetflixSlider'
+
 Array.prototype.sample = function () {
     return this[Math.floor(Math.random() * this.length)];
 }
@@ -43,38 +44,69 @@ const movies = [
     }
 ];
 
-function Carousel() {
-    return (<div className="carousel">
-        <div className="item">1</div>
-        <div className="item">2</div>
-        <div className="item">3</div>
-        <div className="item">4</div>
-        <div className="item">5</div>
-    </div>)
-}
-
 function Browse() {
+    const [featured, setFeatured] = useState(null);
+    const [verified, setVerified] = useState(null);
+    const [community, setCommunity] = useState(null);
+
+    function getMaps(endpoint, func) {
+        axios({
+            method: 'GET',
+            url: endpoint
+        }).then((response) => {
+            var newMaps = [];
+            const res = response.data;
+            for (let i = 0; i < res.length; i++) {
+                const currCreator = res[i].creator;
+                const currName = res[i].layerName ? res[i].layerName : '';
+                newMaps.push({ 'id': i, 'name': currName, 'creator': currCreator, 'image': imageLinks.sample() });
+            }
+            func([...newMaps]);
+        }).catch((error) => {
+            if (error.response) {
+                console.log(error.response)
+                console.log(error.response.status)
+                console.log(error.response.headers)
+            }
+        })
+    }
+
+    useEffect(() => {
+        getMaps('/getLayers?userId=abcd1234', setFeatured);
+        getMaps('/getLayers?userId=abcd1234', setVerified);
+        getMaps('/getLayers?userId=abcd1234', setCommunity);
+    }, []);
+
     return (<div className="Browse">
         <div className="container">
             <h1>Browse</h1>
             <h2>Featured</h2>
-            <Slider>
-                {movies.map(movie => (
-                    <Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>
-                ))}
-            </Slider>
+            <div>
+                {featured && <Slider>
+                    {featured.map(map => (
+                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                    ))}
+                </Slider>}
+            </div>
+
             <h2>Verified</h2>
-            <Slider>
-                {movies.map(movie => (
-                    <Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>
-                ))}
-            </Slider>
+            <div>
+                {verified && <Slider>
+                    {verified.map(map => (
+                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                    ))}
+                </Slider>}
+            </div>
+
             <h2>Community</h2>
-            <Slider>
-                {movies.map(movie => (
-                    <Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>
-                ))}
-            </Slider>
+            <div>
+                {community && <Slider>
+                    {community.map(map => (
+                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                    ))}
+                </Slider>}
+            </div>
+
         </div>
     </div>);
 }

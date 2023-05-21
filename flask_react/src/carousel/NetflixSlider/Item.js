@@ -1,29 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames';
 import SliderContext from './context'
 import ShowDetailsButton from './ShowDetailsButton'
 import Mark from './Mark'
 import './Item.scss'
 
-const Item = ({ movie }) => (
-  <SliderContext.Consumer>
-    {({ onSelectSlide, currentSlide, elementRef }) => {
-      const isActive = currentSlide && currentSlide.id === movie.id;
+function Item({ movie }) {
+  const [style, setStyle] = useState({ display: 'none' });
+  return (
+    <SliderContext.Consumer>
+      {({ onSelectSlide, currentSlide, elementRef }) => {
+        const isActive = currentSlide && currentSlide.id === movie.id;
 
-      return (
-        <div
-          ref={elementRef}
-          className={cx('item', {
-            'item--open': isActive,
-          })}
-        >
-          <img src={movie.image} alt="" />
-          <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
-          {isActive && <Mark />}
-        </div>
-      );
-    }}
-  </SliderContext.Consumer>
-);
+        return (
+          <div
+            ref={elementRef}
+            className={cx('item', {
+              'item--open': isActive,
+            })} onMouseEnter={e => {
+              console.log('here');
+              setStyle({ display: 'block' });
+            }} onMouseLeave={e => {
+              setStyle({ display: 'none' });
+            }}
+          >
+            <img src={movie.image} alt="" />
+            <div className="centered" style={style}>{movie.name}<br />{movie.creator}</div>
+            <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
+            {isActive && <Mark />}
+          </div>
+        );
+      }}
+    </SliderContext.Consumer>);
+}
 
 export default Item;
