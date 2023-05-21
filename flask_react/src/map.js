@@ -8,18 +8,49 @@ function Map(props) {
         // "mapsApiKey": "AIzaSyCq31WS6iguw04oT8IrpnpSN7DekJgNF6I"
     });
     google.charts.setOnLoadCallback(drawChart);
+    console.log('props', props.data);
     function drawChart() {
-        var data = google.visualization.arrayToDataTable(props.data);
         const center = { lat: props.lat, lng: props.long };
+        console.log(center);
+
+        var styledMap = {
+            name: 'Styled Map',
+            styles: [
+                {
+                    featureType: 'poi.attraction',
+                    stylers: [{ color: '#fce8b2' }]
+                },
+                {
+                    featureType: 'road.highway',
+                    stylers: [{ hue: '#0277bd' }, { saturation: -50 }]
+                },
+                {
+                    featureType: 'road.highway',
+                    elementType: 'labels.icon',
+                    stylers: [{ hue: '#000' }, { saturation: 100 }, { lightness: 50 }]
+                },
+                {
+                    featureType: 'landscape',
+                    stylers: [{ hue: '#259b24' }, { saturation: 10 }, { lightness: -22 }]
+                }
+            ]
+        };
 
         var map = new google.visualization.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: center
+            zoom: 7,
+            center: center,
+            mapType: styledMap
+            // mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+
+        console.log('data', props.data.length);
+        // if (props.data.length > 1) {
+        var data = google.visualization.arrayToDataTable(props.data);
         map.draw(data, {
             showTooltip: true,
             showInfoWindow: true
         });
+        // }
     }
 }
 

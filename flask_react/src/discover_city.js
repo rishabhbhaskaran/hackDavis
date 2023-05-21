@@ -34,13 +34,14 @@ function DiscoverCity() {
         })
             .then((response) => {
                 const res = response.data['pins'];
-                var mapArray = [['Lat', 'Long', 'Name']];
+                var mapArray = [['Lat', 'Long', 'Name'], [lat, long, 'Current Location']];
                 for (let i = 0; i < res.length; i++) {
                     const currLat = res[i]['lat'];
                     const currLong = res[i]['long'];
                     const currName = res[i]['data']['name'] ? res[i]['data']['name'] : "";
                     mapArray.push([currLat, currLong, currName]);
                 }
+                console.log('map array', mapArray);
                 setMapData([...mapArray])
             }).catch((error) => {
                 if (error.response) {

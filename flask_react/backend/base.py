@@ -71,7 +71,7 @@ def aggreagateMap():
         "location": {
             "$near": {
                 "$geometry": target_point,
-                "$maxDistance": 50000
+                "$maxDistance": 10
             }
         }
     }
@@ -79,8 +79,7 @@ def aggreagateMap():
     result=collection.find(query)
     #transform
     results=transform(result)
-
-    return jsonify({'pins':results})
+    return jsonify({'pins': results})
 
 if __name__ == '__main__':
     client=MongoClient(conn)

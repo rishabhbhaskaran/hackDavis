@@ -1,0 +1,9 @@
+#body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.flex-item {
+    flex-grow: 0.9;
+}
