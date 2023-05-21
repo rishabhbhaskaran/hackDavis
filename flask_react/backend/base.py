@@ -60,7 +60,7 @@ def aggreagateMap():
     # Define the target geospatial point
     target_point = {
         "type": "Point",
-        "coordinates": [-121.75136,38.53782]
+        "coordinates": [request.args.get('long'),request.args.get('lat')]
     }
 
     # Perform the query to find points close to the target point
