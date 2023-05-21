@@ -12,7 +12,7 @@ Array.prototype.sample = function () {
 
 const imageLinks = ['./map1.png', 'map2.png', 'map3.png', 'map4.png', 'map5.png'];
 
-function Browse() {
+function Browse(props) {
     const [featured, setFeatured] = useState([]);
     const [verified, setVerified] = useState([]);
     const [community, setCommunity] = useState([]);
@@ -52,7 +52,7 @@ function Browse() {
             <div>
                 {(featured && featured.length) ? <Slider>
                     {featured.map(map => (
-                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                        <Slider.Item className="sliderItem" movie={map} key={map.id} topLevelState={props.topLevelState} setTopLevelState={props.setTopLevelState}>item1</Slider.Item>
                     ))}
                 </Slider> : <div></div>}
             </div>
@@ -61,7 +61,7 @@ function Browse() {
             <div>
                 {(verified && verified.length) ? <Slider>
                     {verified.map(map => (
-                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                        <Slider.Item className="sliderItem" movie={map} key={map.id} topLevelState={props.topLevelState} setTopLevelState={props.setTopLevelState}>item1</Slider.Item>
                     ))}
                 </Slider> : <div></div>}
             </div>
@@ -70,7 +70,7 @@ function Browse() {
             <div>
                 {(community && community.length) ? <Slider>
                     {community.map(map => (
-                        <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
+                        <Slider.Item className="sliderItem" movie={map} key={map.id} topLevelState={props.topLevelState} setTopLevelState={props.setTopLevelState}>item1</Slider.Item>
                     ))}
                 </Slider> : <div></div>}
             </div>

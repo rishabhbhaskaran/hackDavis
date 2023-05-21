@@ -3,10 +3,40 @@ import cx from 'classnames';
 import SliderContext from './context'
 import ShowDetailsButton from './ShowDetailsButton'
 import Mark from './Mark'
+import axios from "axios";
 import './Item.scss'
+import '../../../src/'
 
-function Item({ movie }) {
+function Item({ movie, setTopLevelState, topLevelState }) {
   const [style, setStyle] = useState({ display: 'none' });
+  const [added, setAdded] = useState(false);
+
+  function viewMap(id) {
+    setTopLevelState(!topLevelState); // force whole page to reload
+    // send post request
+    window.history.pushState({}, null, "/viewMap");
+  }
+
+  function addMap(id, userId) {
+    axios({
+      method: "PATCH",
+      url: "/save",
+      data: {
+        'layerId': id,
+        'userId': userId,
+      }
+    })
+      .then((response) => {
+        setAdded(true);
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response)
+          console.log(error.response.status)
+          console.log(error.response.headers)
+        }
+      })
+  }
+
   return (
     <SliderContext.Consumer>
       {({ onSelectSlide, currentSlide, elementRef }) => {
@@ -24,8 +54,9 @@ function Item({ movie }) {
               setStyle({ display: 'none' });
             }}
           >
-            <img src={movie.image} alt="" />
+            <img className="icon" src={movie.image} alt="" />
             <div className="centered" style={style}>{movie.name}<br />{movie.creator}</div>
+            <div className="bottomCentered"><img onClick={added ? () => { } : () => addMap(movie.id, 1)} style={{ ...style, height: 30, width: 30 }} src={added ? 'https://www.freeiconspng.com/thumbs/checkmark-png/checkmark-png-5.png' : 'https://www.freeiconspng.com/thumbs/add-icon-png/add-icon--line-iconset--iconsmind-29.png'} /></div>
             {/* <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
             {isActive && <Mark />} */}
           </div>

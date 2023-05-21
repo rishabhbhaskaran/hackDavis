@@ -43,4 +43,11 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.patch(
+    '/save',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
 };
