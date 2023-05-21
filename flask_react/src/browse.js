@@ -27,7 +27,7 @@ function Browse(props) {
             for (let i = 0; i < res.length; i++) {
                 const currCreator = res[i].creator;
                 const currName = res[i].layerName ? res[i].layerName : '';
-                newMaps.push({ 'id': i, 'name': currName, 'creator': currCreator, 'image': imageLinks.sample() });
+                newMaps.push({ 'id': i, 'layerId': res[i].layerId, 'name': currName, 'creator': currCreator, 'image': imageLinks.sample() });
             }
             func([...newMaps]);
         }).catch((error) => {
@@ -44,6 +44,7 @@ function Browse(props) {
         getMaps('/getVerified', setVerified);
         getMaps('/getLayers?userId=abcd1234', setCommunity);
     }, []);
+    console.log(community);
 
     return (<div className="Browse">
         <div className="container">

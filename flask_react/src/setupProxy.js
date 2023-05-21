@@ -50,4 +50,11 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.get(
+    '/getTagline',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
 };

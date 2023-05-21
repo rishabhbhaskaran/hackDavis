@@ -7,6 +7,7 @@ import DiscoverCity from './discover_city.js';
 import CreateLayer from './create_layer.js';
 import Visualize from './visualize.js';
 import Browse from './browse.js';
+import ViewMap from './view_map';
 import Map from './map.js';
 
 import {
@@ -24,7 +25,7 @@ function App() {
                 <Route path="/create_layer" element={<CreateLayer userId="abcd1234" />} />
                 <Route path="/visualize" element={<Visualize userId="abcd1234" />} />
                 <Route path="/browse" element={<Browse userId="abcd1234" topLevelState={topLevelState} setTopLevelState={setTopLevelState} />} />
-                {/* <Route path="/viewMap" element={<ViewMap userId="abcd1234" topLevelState={topLevelState} setTopLevelState={setTopLevelState} />} /> */}
+                <Route path="/viewMap" element={<ViewMap userId="abcd1234" topLevelState={topLevelState} setTopLevelState={setTopLevelState} />} />
             </Routes>
         </Router>
     );

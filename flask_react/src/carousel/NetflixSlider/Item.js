@@ -6,23 +6,24 @@ import Mark from './Mark'
 import axios from "axios";
 import './Item.scss'
 import '../../../src/'
+import { useNavigate } from 'react-router-dom';
 
 function Item({ movie, setTopLevelState, topLevelState }) {
   const [style, setStyle] = useState({ display: 'none' });
   const [added, setAdded] = useState(false);
+  const navigate = useNavigate();
 
   function viewMap(id) {
     setTopLevelState(!topLevelState); // force whole page to reload
-    // send post request
-    window.history.pushState({}, null, "/viewMap");
+    navigate("/viewMap", { 'state': { 'layerId': id } });
   }
 
-  function addMap(id, userId) {
+  function addMap(layerId, userId) {
     axios({
       method: "PATCH",
       url: "/save",
       data: {
-        'layerId': id,
+        'layerId': layerId,
         'userId': userId,
       }
     })
@@ -52,7 +53,7 @@ function Item({ movie, setTopLevelState, topLevelState }) {
               setStyle({ display: 'block' });
             }} onMouseLeave={e => {
               setStyle({ display: 'none' });
-            }}
+            }} onClick={() => viewMap(movie.layerId)}
           >
             <img className="icon" src={movie.image} alt="" />
             <div className="centered" style={style}>{movie.name}<br />{movie.creator}</div>

@@ -8,6 +8,7 @@ function DiscoverCity() {
     // new line start
     const [mapData, setMapData] = useState(null);
     const [locationData, setLocationData] = useState(null);
+    const [tagline, setTagline] = useState('');
 
     function getLocation() {
         if (navigator.geolocation) {
@@ -23,6 +24,15 @@ function DiscoverCity() {
         setLocationData({ 'lat': lat, 'long': long });
         getData(lat, long);
         // getCity(position.coords.latitude, position.coords.longitude);
+    }
+
+    function getTagLine() {
+        axios({
+            method: "GET",
+            url: "/getTagline"
+        }).then((response) => {
+            setTagline(response.data);
+        })
     }
 
     function getData(lat, long) {
@@ -51,6 +61,7 @@ function DiscoverCity() {
 
     useEffect(() => {
         getLocation();
+        getTagLine();
     }, []);
 
     return (
@@ -58,6 +69,7 @@ function DiscoverCity() {
             {/* <div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary"></div> */}
             <div className="container">
                 <h1>Discover Davis</h1>
+                <div id="tagline">{tagline}</div>
                 <div id='map'></div>
                 {/* {locationData && <div>Lat {locationData.lat} Long {locationData.long}</div>} */}
             </div>
