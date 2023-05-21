@@ -45,6 +45,9 @@ def transform(results):
              'long': result['location']['coordinates'][0]}
         if 'data' in result:
             pin['data'] = result['data']
+        else:
+            pin['data']={}
+            
         pins.append(pin)
 
     return pins
