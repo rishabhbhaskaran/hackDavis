@@ -82,6 +82,12 @@ def aggreagateMap():
 
     return jsonify({'pins':results})
 
+@app.route('/getLayers')
+def getLayers():
+    if request.args.get('userId'):
+        results=col.find({'userId':request.args.get('userId')})
+            
+
 if __name__ == '__main__':
     client=MongoClient(conn)
     db = client['hackDavis']
