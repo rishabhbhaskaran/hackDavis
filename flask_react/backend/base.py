@@ -177,7 +177,7 @@ def getTopPicks():
         results.append(ele)
 
     results=[ele for ele in results if 'score' in ele]
-    topPicks = sorted(results, key=lambda x: x['score'])[:10]
+    topPicks = sorted(results, reverse=True, key=lambda x: x['score'])[:10]
     return jsonify(topPicks)
 
 @app.route('/getVerified', methods=['GET'])
