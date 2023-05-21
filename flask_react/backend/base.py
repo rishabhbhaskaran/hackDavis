@@ -32,7 +32,7 @@ def createProject():
 
     coor=getCoor(servResp[0]['lat'],servResp[0]['lon'])
     req['location']=coor
-    if 'layerId' not in req:
+    if req['layerId'] is None:
         req['layerId'] = str(uuid.uuid4())
 
     if col.insert_one(req):
@@ -41,17 +41,16 @@ def createProject():
 def transform(results):
     pins=[]
     for result in results:
-        pin={'lat':result['location']['coordinates'][1],
-             'long': result['location']['coordinates'][0]}
-        if 'data' in result:
-            pin['data'] = result['data']
-        else:
-            pin['data']={}
+        pin=result
+        pin['lat']=result['location']['coordinates'][1]
+        pin['long']=result['location']['coordinates'][0]
 
+        pin.pop('location')
         pins.append(pin)
 
     return pins
 
+#top picks
 
 @app.route('/getAggregateMap')
 def aggreagateMap():
@@ -76,17 +75,32 @@ def aggreagateMap():
         }
     }
 
-    result=collection.find(query)
+    result=collection.find(query,{'_id':0})
     #transform
     results=transform(result)
+
+    return jsonify({'pins':results})
+
+@app.route('/getLayer')
+def getLayer():
+
+    if request.args.get('layerId'):
+        results=col.find({'layerId':request.args.get('layerId')},{"_id":0})
+        results=transform(results)
 
     return jsonify({'pins':results})
 
 @app.route('/getLayers')
 def getLayers():
     if request.args.get('userId'):
-        results=col.find({'userId':request.args.get('userId')})
-            
+        projection = {
+            'layerName': 1,
+            'layerId': 1,
+            '_id': 0
+        }
+
+        results=[ele for ele in col.find({'userId':request.args.get('userId')},projection)]
+        return jsonify(results)
 
 if __name__ == '__main__':
     client=MongoClient(conn)
