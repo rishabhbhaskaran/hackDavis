@@ -37,7 +37,8 @@ def createProject():
     if req['layerId'] is None:
         req['layerId'] = str(uuid.uuid4())
         layer=db['layerMeta']
-        layer.insert_one({'_id':req['layerId'],'userId':req['userId'],'supports':0,'savedBy':[req['userId']],'saves':0})
+        layer.insert_one({'_id':req['layerId'],'userId':req['userId'],'supports':0,
+                          'savedBy':[req['userId']],'saves':0, 'layerName':req['layerName']})
 
 
     if col.insert_one(req):
@@ -97,15 +98,25 @@ def getLayer():
 
 @app.route('/getLayers')
 def getLayers():
+    layer=db['layerMeta']
     if request.args.get('userId'):
         projection = {
             'layerName': 1,
-            'layerId': 1,
+            'layerId': '$_id',
             '_id': 0,
             'userId':1
         }
 
-        results=[ele for ele in col.find({'userId':request.args.get('userId')},projection)]
+        query = {'savedBy':{'$in':[request.args.get('userId')]}}
+
+      
+        # Perform the aggregation pipeline with the query and projection
+        result = layer.aggregate([
+            {'$match': query},
+            {'$project': projection}
+        ])
+
+        results=[ele for ele in result]
         return jsonify(results)
 
 @app.route('/support',methods=['PATCH'])
