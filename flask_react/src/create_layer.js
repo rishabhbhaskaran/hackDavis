@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import Map from './map.js';
 
 function CreateLayer() {
+    const [locationData, setLocationData] = useState(null);
     const [layerId, setLayerId] = useState(null);
 
     function getLocation() {
