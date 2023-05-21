@@ -26,8 +26,8 @@ function Item({ movie }) {
           >
             <img src={movie.image} alt="" />
             <div className="centered" style={style}>{movie.name}<br />{movie.creator}</div>
-            <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
-            {isActive && <Mark />}
+            {/* <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
+            {isActive && <Mark />} */}
           </div>
         );
       }}

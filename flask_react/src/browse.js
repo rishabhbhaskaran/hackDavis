@@ -11,43 +11,11 @@ Array.prototype.sample = function () {
 }
 
 const imageLinks = ['./map1.png', 'map2.png', 'map3.png', 'map4.png', 'map5.png'];
-const movies = [
-    {
-        id: 1,
-        image: imageLinks.sample(),
-        title: '1983'
-    },
-    {
-        id: 2,
-        image: imageLinks.sample(),
-        title: 'Russian doll'
-    },
-    {
-        id: 3,
-        image: imageLinks.sample(),
-        title: 'The rain',
-    },
-    {
-        id: 4,
-        image: imageLinks.sample(),
-        title: 'Sex education'
-    },
-    {
-        id: 5,
-        image: imageLinks.sample(),
-        title: 'Elite'
-    },
-    {
-        id: 6,
-        image: imageLinks.sample(),
-        title: 'Black mirror'
-    }
-];
 
 function Browse() {
-    const [featured, setFeatured] = useState(null);
-    const [verified, setVerified] = useState(null);
-    const [community, setCommunity] = useState(null);
+    const [featured, setFeatured] = useState([]);
+    const [verified, setVerified] = useState([]);
+    const [community, setCommunity] = useState([]);
 
     function getMaps(endpoint, func) {
         axios({
@@ -72,8 +40,8 @@ function Browse() {
     }
 
     useEffect(() => {
-        getMaps('/getLayers?userId=abcd1234', setFeatured);
-        getMaps('/getLayers?userId=abcd1234', setVerified);
+        getMaps('/getFeatured', setFeatured);
+        getMaps('/getVerified', setVerified);
         getMaps('/getLayers?userId=abcd1234', setCommunity);
     }, []);
 
@@ -82,31 +50,30 @@ function Browse() {
             <h1>Browse</h1>
             <h2>Featured</h2>
             <div>
-                {featured && <Slider>
+                {(featured && featured.length) ? <Slider>
                     {featured.map(map => (
                         <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
                     ))}
-                </Slider>}
+                </Slider> : <div></div>}
             </div>
 
             <h2>Verified</h2>
             <div>
-                {verified && <Slider>
+                {(verified && verified.length) ? <Slider>
                     {verified.map(map => (
                         <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
                     ))}
-                </Slider>}
+                </Slider> : <div></div>}
             </div>
 
             <h2>Community</h2>
             <div>
-                {community && <Slider>
+                {(community && community.length) ? <Slider>
                     {community.map(map => (
                         <Slider.Item className="sliderItem" movie={map} key={map.id}>item1</Slider.Item>
                     ))}
-                </Slider>}
+                </Slider> : <div></div>}
             </div>
-
         </div>
     </div>);
 }
