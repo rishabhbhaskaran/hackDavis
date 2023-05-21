@@ -18,13 +18,19 @@
     padding-right: 20px;
 }
 
-.layer_item {
-    background-color: lightblue;
+.layer_item,
+.layer_item:hover,
+.layer_item_clicked {
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
 }
 
-.layer_item:hover {
+.layer_item {
+    background-color: lightblue;
+}
+
+.layer_item:hover,
+.layer_item_clicked {
     background-color: aquamarine;
 }
