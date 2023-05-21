@@ -5,7 +5,7 @@ import './yeti.min.css';
 import './create_layer.css';
 import Map from './map.js';
 
-function CreateLayer() {
+function CreateLayer(props) {
     const [locationData, setLocationData] = useState(null);
     const [mapData, setMapData] = useState(null);
     const [layerId, setLayerId] = useState(null);
@@ -60,7 +60,8 @@ function CreateLayer() {
                 'layerName': layerName,
                 'address': address,
                 'projectName': projectName,
-                'description': description
+                'description': description,
+                'userId': props.userId
             }
         }).then((response) => {
             const res = response.data;

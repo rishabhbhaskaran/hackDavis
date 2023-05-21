@@ -8,11 +8,8 @@ function Map(props) {
         // "mapsApiKey": "AIzaSyCq31WS6iguw04oT8IrpnpSN7DekJgNF6I"
     });
     google.charts.setOnLoadCallback(drawChart);
-    console.log('props', props.data);
     function drawChart() {
         const center = { lat: props.lat, lng: props.long };
-        console.log(center);
-
         var styledMap = {
             name: 'Styled Map',
             styles: [

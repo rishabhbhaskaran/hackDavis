@@ -2,8 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import './yeti.min.css';
-import { createRoot } from 'react-dom/client';
-import CreateLayer from './create_layer.js';
 import Map from './map.js';
 
 function DiscoverCity() {
