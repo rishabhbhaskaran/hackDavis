@@ -71,7 +71,7 @@ def aggreagateMap():
         "location": {
             "$near": {
                 "$geometry": target_point,
-                "$maxDistance": 10
+                "$maxDistance": 50000
             }
         }
     }
