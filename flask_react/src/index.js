@@ -5,6 +5,7 @@ import './yeti.min.css';
 import { createRoot } from 'react-dom/client';
 import DiscoverCity from './discover_city.js';
 import CreateLayer from './create_layer.js';
+import Visualize from './visualize';
 import Map from './map.js';
 import {
     BrowserRouter as Router,
@@ -18,6 +19,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<DiscoverCity />} />
                 <Route path="/create_layer" element={<CreateLayer />} />
+                <Route path="/visualize" element={<Visualize userId="abcd1234" />} />
             </Routes>
         </Router>
     );

@@ -15,4 +15,18 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.get(
+    '/getLayer',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
+  app.get(
+    '/getLayers',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+    })
+  );
 };

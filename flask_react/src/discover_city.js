@@ -41,7 +41,6 @@ function DiscoverCity() {
                     const currName = res[i]['data']['name'] ? res[i]['data']['name'] : "";
                     mapArray.push([currLat, currLong, currName]);
                 }
-                console.log('map array', mapArray);
                 setMapData([...mapArray])
             }).catch((error) => {
                 if (error.response) {

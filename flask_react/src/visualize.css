@@ -1,0 +1,30 @@
+#body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 400px;
+}
+
+.flex-item {
+    /* flex-grow: 0.9; */
+}
+
+#saved_layers {
+    min-height: 400px;
+    max-height: 400px;
+    min-width: 300px;
+    overflow-y: scroll;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.layer_item {
+    background-color: lightblue;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.layer_item:hover {
+    background-color: aquamarine;
+}
