@@ -25,11 +25,11 @@ function CreateLayer() {
             method: 'POST',
             url: '/createProject',
             data: {
-                'layerId': _,
-                'layerName': _,
-                'address': _,
-                'projectName': _,
-                'description': _
+                'layerId': 1,
+                'layerName': 'name',
+                'address': '1440 Wake Forest Drive, Davis CA',
+                'projectName': 'Water Main Improvements',
+                'description': 'improvements'
             }
         }).then((response) => {
             const res = response.data;

@@ -20,14 +20,17 @@ function DiscoverCity() {
     }
 
     function showPosition(position) {
-        setLocationData({ 'lat': position.coords.latitude, 'long': position.coords.longitude });
+        var lat = position.coords.latitude;
+        var long = position.coords.longitude;
+        setLocationData({ 'lat': lat, 'long': long });
+        getData(lat, long);
         // getCity(position.coords.latitude, position.coords.longitude);
     }
 
-    function getData() {
+    function getData(lat, long) {
         axios({
             method: "GET",
-            url: "/getAggregateMap",
+            url: "/getAggregateMap?lat=" + lat + "&long=" + long,
         })
             .then((response) => {
                 const res = response.data['pins'];
@@ -49,7 +52,6 @@ function DiscoverCity() {
     }
 
     useEffect(() => {
-        getData()
         getLocation();
     }, []);
 
