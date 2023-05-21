@@ -79,7 +79,8 @@ def aggreagateMap():
     result=collection.find(query)
     #transform
     results=transform(result)
-    return jsonify(results)
+
+    return jsonify({'pins':results})
 
 if __name__ == '__main__':
     client=MongoClient(conn)
