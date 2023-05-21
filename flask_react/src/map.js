@@ -40,13 +40,38 @@ function Map(props) {
             // mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-        console.log('data', props.data.length);
-        // if (props.data.length > 1) {
-        var data = google.visualization.arrayToDataTable(props.data);
-        map.draw(data, {
-            showTooltip: true,
-            showInfoWindow: true
-        });
+        if (props.data[0].length == 3) {
+            var data = google.visualization.arrayToDataTable(props.data);
+            map.draw(data, {
+                showTooltip: true,
+                showInfoWindow: true
+            });
+        } else {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Lat');
+            data.addColumn('number', 'Long');
+            data.addColumn('string', 'Name');
+            data.addColumn('string', 'Marker');
+
+            console.log(props.data);
+
+            data.addRows(props.data);
+            map.draw(data, {
+                showTooltip: true,
+                showInfoWindow: true,
+                icons: {
+                    blue: {
+                        normal: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+                    },
+                    green: {
+                        normal: 'http://maps.google.com/mapfiles/ms/icons/green.png'
+                    },
+                    red: {
+                        normal: 'http://maps.google.com/mapfiles/ms/icons/red.png'
+                    }
+                }
+            });
+        }
         // }
     }
 }
