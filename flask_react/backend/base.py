@@ -47,7 +47,7 @@ def transform(results):
             pin['data'] = result['data']
         else:
             pin['data']={}
-            
+
         pins.append(pin)
 
     return pins
@@ -63,7 +63,7 @@ def aggreagateMap():
     # Define the target geospatial point
     target_point = {
         "type": "Point",
-        "coordinates": [request.args.get('long'),request.args.get('lat')]
+        "coordinates": [float(request.args.get('long')),float(request.args.get('lat'))]
     }
 
     # Perform the query to find points close to the target point
